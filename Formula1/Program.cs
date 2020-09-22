@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using Controller;
 
 namespace Formula1
 {
@@ -6,7 +8,14 @@ namespace Formula1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Data.Initialize();
+            Data.NextRace();
+            Console.WriteLine(Data.CurrentRace.Track.Name);
+
+            for (; ; )
+            {
+                Thread.Sleep(100);
+            }
         }
     }
 }

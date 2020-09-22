@@ -26,7 +26,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Glenn-PC\\stack\\School\\C#\\Formula1\\Model\\Model.csproj": {
+                "projectPath": "C:\\Users\\Glenn-PC\\stack\\School\\C#\\Formula1\\Model\\Model.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

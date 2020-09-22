@@ -1,0 +1,12 @@
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\bin\Debug\netcoreapp3.1\Model.dll
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.csprojAssemblyReference.cache
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.AssemblyInfoInputs.cache
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.AssemblyInfo.cs
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\bin\Debug\netcoreapp3.1\Controller.deps.json
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\bin\Debug\netcoreapp3.1\Controller.dll
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\bin\Debug\netcoreapp3.1\Controller.pdb
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\bin\Debug\netcoreapp3.1\Model.pdb
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.csproj.CoreCompileInputs.cache
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.csproj.CopyComplete
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.dll
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Controller\obj\Debug\netcoreapp3.1\Controller.pdb

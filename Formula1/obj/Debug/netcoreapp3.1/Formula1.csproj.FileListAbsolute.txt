@@ -11,3 +11,8 @@ C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\obj\Debug\netcoreapp3.1\Form
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\obj\Debug\netcoreapp3.1\Formula1.dll
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\obj\Debug\netcoreapp3.1\Formula1.pdb
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\obj\Debug\netcoreapp3.1\Formula1.genruntimeconfig.cache
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\bin\Debug\netcoreapp3.1\Controller.dll
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\bin\Debug\netcoreapp3.1\Model.dll
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\bin\Debug\netcoreapp3.1\Controller.pdb
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\bin\Debug\netcoreapp3.1\Model.pdb
+C:\Users\Glenn-PC\stack\School\C#\Formula1\Formula1\obj\Debug\netcoreapp3.1\Formula1.csproj.CopyComplete

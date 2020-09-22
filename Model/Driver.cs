@@ -4,12 +4,17 @@ using System.Text;
 
 namespace Model
 {
-    class Driver : IParticipant
+    public class Driver : IParticipant
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int Points { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IEquipment IEquipment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public TeamColors TeamColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private string name;
+        private int points;
+        private IEquipment iEquipment;
+        private TeamColors teamColor;
+        
+        public string Name { get => name; set => name = value; }
+        public int Points { get =>points; set => points = value; }
+        public IEquipment IEquipment { get => iEquipment; set => iEquipment = value; }
+        public TeamColors TeamColor { get => teamColor; set => teamColor = value; }
 
         public Driver(string name, int points, IEquipment iEquipment, TeamColors teamColor)
         {

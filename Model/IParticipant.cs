@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model
 {
-    interface IParticipant
+    public interface IParticipant
     {
         public string Name { get; set; }
         public int Points { get; set; }
@@ -12,10 +12,10 @@ namespace Model
         public TeamColors TeamColor { get; set; }
     }
 
-    enum TeamColors
+    public enum TeamColors
     {
         Red,
-        Greeen,
+        Green,
         Yellow,
         Grey,
         Blue

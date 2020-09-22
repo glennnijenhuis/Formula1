@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model
 {
-    class Car : IEquipment
+    public class Car : IEquipment
     {
         private int quality;
         private int performance;
