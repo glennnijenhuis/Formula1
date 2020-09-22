@@ -10,7 +10,7 @@ namespace Formula1
         {
             Data.Initialize();
             Data.NextRace();
-            Console.WriteLine(Data.CurrentRace.Track.Name);
+            Visualize.DrawTrack(Data.CurrentRace.Track);
 
             for (; ; )
             {

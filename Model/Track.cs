@@ -16,15 +16,20 @@ namespace Model
         public Track(string name, SectionTypes[] sections)
         {
             Name = name;
-            Sections = new LinkedList<Section>();
+            Sections = ArrayToLinkedList(sections);
+           
+        }
 
+        public LinkedList<Section> ArrayToLinkedList(SectionTypes[] sections)
+        {
+            LinkedList<Section> linkedListSection = new LinkedList<Section>();
+            
             foreach (SectionTypes sec in sections)
             {
-                Sections.AddLast(new Section(sec));
+                linkedListSection.AddLast(new Section(sec));
             }
 
-
-
+            return linkedListSection;
         }
     }
 }
