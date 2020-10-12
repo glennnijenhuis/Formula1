@@ -15,5 +15,7 @@ namespace Model
         public int DistanceLeft { get => distanceLeft; set => distanceLeft = value; }
         public IParticipant Right { get => right; set => right = value; }
         public int DistanceRight { get => distanceRight; set => distanceRight = value; }
+
+       
     }
 }

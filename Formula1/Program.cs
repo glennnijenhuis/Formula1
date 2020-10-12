@@ -11,6 +11,7 @@ namespace Formula1
             Data.Initialize();
             Data.NextRace();
             Visualize.DrawTrack(Data.CurrentRace.Track);
+            Visualize.Initialize();
 
             for (; ; )
             {

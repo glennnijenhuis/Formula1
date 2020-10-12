@@ -7,3 +7,12 @@ C:\Users\Glenn-PC\stack\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.A
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.csproj.CoreCompileInputs.cache
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.dll
 C:\Users\Glenn-PC\stack\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.pdb
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\bin\Debug\netcoreapp3.1\Model.deps.json
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\bin\Debug\netcoreapp3.1\Model.dll
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\bin\Debug\netcoreapp3.1\Model.pdb
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.csprojAssemblyReference.cache
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.AssemblyInfoInputs.cache
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.AssemblyInfo.cs
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.csproj.CoreCompileInputs.cache
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.dll
+C:\Users\mrgle\Documents\School\C#\Formula1\Model\obj\Debug\netcoreapp3.1\Model.pdb
