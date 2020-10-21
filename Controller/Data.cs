@@ -21,8 +21,8 @@ namespace Controller
         {
            
 
-            Competition.Participants.Add(new Driver("Max Verstappen", 0, new Car(9,9,9,false), TeamColors.Blue));
-            Competition.Participants.Add(new Driver("Lando Norris", 0, new Car(8, 8, 8, false), TeamColors.Red));
+            Competition.Participants.Add(new Driver("Max Verstappen", 0, new Car(8,2,10,false), TeamColors.Blue));
+            Competition.Participants.Add(new Driver("Lando Norris", 0, new Car(9, 3, 10, false), TeamColors.Red));
 
         }
 
@@ -30,7 +30,7 @@ namespace Controller
         {
 
             Track track1 = new Track("Circuit Heerde", new SectionTypes[] {SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Finish });
-            Track track2 = new Track("Circuit Zandvoort", new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Finish, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.LeftCorner,  SectionTypes.Straight, SectionTypes.LeftCorner });
+            Track track2 = new Track("Circuit Zandvoort", new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.LeftCorner,  SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Finish });
             Competition.Tracks.Enqueue(track1);
             Competition.Tracks.Enqueue(track2);
 
@@ -44,6 +44,7 @@ namespace Controller
             if(track != null)
             {
                 CurrentRace = new Race(track, Competition.Participants);
+
             }
         }
     }

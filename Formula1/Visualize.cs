@@ -12,7 +12,7 @@ namespace Formula1
         static int x = 5;
         static int y = 10;
         static int minX = 1;
-        static int minY = 1;
+        static int minY = 2;
 
         private static int orientation;
 
@@ -33,6 +33,12 @@ namespace Formula1
         public static void Initialize()
         {
             Data.CurrentRace.DriversChanged += HandleDriversChanged;
+            Data.CurrentRace.RaceFinished += OnRaceFinishedEvent;
+
+            x = 5;
+            y = 10;
+            minX = 1;
+            minY = 2;
         }
 
         public static void DrawTrack(Track track)
@@ -112,12 +118,15 @@ namespace Formula1
                 // draw the graphic in place
                 for (int i = 0; i < GraphicHeight; i++)
                 {
+
                     string lane = tileGraphic[i];
 
                     lane = SetupPositions(lane, sectionDataParticipants.Left, sectionDataParticipants.Right);
                     
                     Console.SetCursorPosition(cursorX, cursorY + i);
                     Console.Write(lane);
+
+                   
                 }
 
 
@@ -183,11 +192,21 @@ namespace Formula1
             {
                 if (participant1 != null)
                 {
-                    string naamParticipant = participant1.Name;
-                    string naam2 = "";
-                    naam2 = naamParticipant.Substring(0, 1);
-                    naam = naam.Replace("1", naam2);
-                    return naam;
+                    if (participant1.IEquipment.IsBroken)
+                    {
+                        string naam2 = "";
+                        naam2 = "X";
+                        naam = naam.Replace("1", naam2);
+                        return naam;
+                    }
+                    else
+                    {
+                        string naamParticipant = participant1.Name;
+                        string naam2 = "";
+                        naam2 = naamParticipant.Substring(0, 1);
+                        naam = naam.Replace("1", naam2);
+                        return naam;
+                    }
                 }
                 else
                 {
@@ -199,11 +218,21 @@ namespace Formula1
             {
                 if (participant2 != null)
                 {
-                    string naamParticipant = participant2.Name;
-                    string naam2 = "";
-                    naam2 = naamParticipant.Substring(0, 1);
-                    naam = naam.Replace("2", naam2);
-                    return naam;
+                    if (participant2.IEquipment.IsBroken)
+                    {
+                        string naam2 = "";
+                        naam2 = "X";
+                        naam = naam.Replace("2", naam2);
+                        return naam;
+                    }
+                    else
+                    {
+                        string naamParticipant = participant2.Name;
+                        string naam2 = "";
+                        naam2 = naamParticipant.Substring(0, 1);
+                        naam = naam.Replace("2", naam2);
+                        return naam;
+                    }
                 }
                 else
                 {
@@ -221,6 +250,12 @@ namespace Formula1
         {
             DrawTrack(driversChangedEventArgs.Track);
 
+        }
+
+        private static void OnRaceFinishedEvent(object source, EventArgs e)
+        {
+            Data.CurrentRace.DriversChanged -= HandleDriversChanged;
+            Data.CurrentRace.RaceFinished -= OnRaceFinishedEvent;
         }
 
         #region graphics
