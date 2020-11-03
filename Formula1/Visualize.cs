@@ -33,7 +33,7 @@ namespace Formula1
         public static void Initialize()
         {
             Data.CurrentRace.DriversChanged += HandleDriversChanged;
-            Data.CurrentRace.RaceFinished += OnRaceFinishedEvent;
+            Data.CurrentRace.RaceFinishedEvent += OnRaceFinishedEvent;
 
             x = 5;
             y = 10;
@@ -122,8 +122,14 @@ namespace Formula1
                     string lane = tileGraphic[i];
 
                     lane = SetupPositions(lane, sectionDataParticipants.Left, sectionDataParticipants.Right);
-                    
-                    Console.SetCursorPosition(cursorX, cursorY + i);
+
+                    try{
+                        Console.SetCursorPosition(cursorX, cursorY + i);
+                    }
+                    catch
+                    {
+                        new ArgumentOutOfRangeException();
+                    }
                     Console.Write(lane);
 
                    
@@ -252,10 +258,10 @@ namespace Formula1
 
         }
 
-        private static void OnRaceFinishedEvent(object source, EventArgs e)
+        private static void OnRaceFinishedEvent(object sender, RaceFinishedArgs raceFinishedArgs)
         {
             Data.CurrentRace.DriversChanged -= HandleDriversChanged;
-            Data.CurrentRace.RaceFinished -= OnRaceFinishedEvent;
+            Data.CurrentRace.RaceFinishedEvent -= OnRaceFinishedEvent;
         }
 
         #region graphics

@@ -13,17 +13,19 @@ namespace Model
         public List<IParticipant> Participants { get => participants; set => participants = value; }
 
         public RaceInfo<ParticipantPoints> ParticipantsPoints;
-        public RaceInfo<ParticipantTotalTime> ParticipantsTime;
-
+        public RaceInfo<ParticipantsQuality> ParticipantsQuality;
+        public RaceInfo<ParticipantSectionTimes> ParticipantsSectionTimes;
+        public RaceInfo<ParticipantsTimeBroken> ParticipantsTimeBroken { get; set; }
         public Competition()
         {
             Tracks = new Queue<Track>();
             Participants = new List<IParticipant>();
 
             ParticipantsPoints = new RaceInfo<ParticipantPoints>();
-            ParticipantsTime = new RaceInfo<ParticipantTotalTime>();
+            ParticipantsQuality = new RaceInfo<ParticipantsQuality>();
+            ParticipantsTimeBroken = new RaceInfo<ParticipantsTimeBroken>();
+            ParticipantsSectionTimes = new RaceInfo<ParticipantSectionTimes>();
 
-             += OnRaceFinished;
         }
 
         public Track NextTrack()
@@ -39,11 +41,13 @@ namespace Model
      
         public void AwardPoints(Queue<IParticipant> ranking, Track track)
         {
-            int points = 10;
+            int points = 25;
             foreach (IParticipant participant in ranking)
             {
-                ParticipantsPoints.Add(new ParticipantPoints() { Points = points, Name = participant.Name, Track = track });
-                points += points / 2;
+                ParticipantsPoints.Add(new ParticipantPoints() { Points = points, Participant = participant, Track = track });
+                participant.Points += points;
+                points = points - 5;
+                
             }
         }
 
@@ -51,14 +55,29 @@ namespace Model
         {
             AwardPoints(args.Ranking, args.Track);
             Console.WriteLine($"Track: {args.Track.Name}, uitslag:");
-            while (args.Ranking.Count != 0)
+            int count = args.Ranking.Count;
+            for (int i = 1; i <= count; i++)
             {
-                Console.WriteLine($"Plek {args.Ranking.Count} is voor {args.Ranking.Dequeue().Name}");
+                Console.WriteLine($"Plek {i} is voor {args.Ranking.Dequeue().Name}");
             }
+
             Console.WriteLine("");
             Console.WriteLine(ParticipantsPoints.Print());
-            //Console.WriteLine(KwaliteitGegevens.Print());
-            Console.WriteLine("Wilt u door met de volgende race? (y/n)");
+            Console.WriteLine(ParticipantsQuality.Print());
+            Console.WriteLine("");
+            foreach (IParticipant participant in Participants)
+            {
+                Console.WriteLine($"{participant.Name} heeft {participant.Points} punten");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Next Race? (y/n)");
+
+            string console = Console.ReadLine();
+            while (console != "y")
+            {
+                console = Console.ReadLine();
+            }
+
         }
 
 

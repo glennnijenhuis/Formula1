@@ -6,7 +6,7 @@ namespace Model
 {
     
         public delegate void DriversChanged(DriversChangedEventArgs driversChangedEventArgs);
-        public delegate void RaceFinished(object source, EventArgs e);
+        
 
         public class DriversChangedEventArgs : EventArgs
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Controller;
+using Model;
 
 namespace Formula1
 {
@@ -22,12 +23,12 @@ namespace Formula1
             
             Data.NextRace();
             Visualize.Initialize();
-            Data.CurrentRace.RaceFinished += OnRaceFinished;
+            Data.CurrentRace.RaceFinishedEvent += OnRaceFinished;
             Visualize.DrawTrack(Data.CurrentRace.Track);
             
         }
 
-        public static void OnRaceFinished(object source, EventArgs e)
+        public static void OnRaceFinished(object source, RaceFinishedArgs raceFinishedArgs)
         {
             StartRace();
         }

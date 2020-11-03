@@ -23,12 +23,15 @@ namespace Controller
         public List<IParticipant> Participants { get => participants; set => participants = value; }
         public DateTime StartTime { get => startTime; set => startTime = value; }
 
-        private int LapsLeft = 0;
-        private int LapsRight = 0;
         private int Laps = 3;
         public event DriversChanged DriversChanged;
         public event RaceFinished RaceFinishedEvent;
         private Queue<IParticipant> DriversFinished;
+
+        private Dictionary<IParticipant, long> _sectionTimes;
+        private Dictionary<IParticipant, int> _quality;
+        private Dictionary<IParticipant, int> _rounds;
+        private Dictionary<IParticipant, TimeSpan> _timeBroken;
 
         public Race(Track track, List<IParticipant> participants)
         {
@@ -39,17 +42,22 @@ namespace Controller
             StartTime = DateTime.Now;
             DriversFinished = new Queue<IParticipant>();
             _positions = new Dictionary<Section, SectionData>();
-            AddParticipantsToTrack(track, participants);
             
+            RaceFinishedEvent += Data.Competition.OnRaceFinished;
             timer.Elapsed += OnTimedEvent;
-            RandomizeEquipment();
+            _rounds = new Dictionary<IParticipant, int>();
+            _sectionTimes = new Dictionary<IParticipant, long>();
+            _quality = new Dictionary<IParticipant, int>();
+            _timeBroken = new Dictionary<IParticipant, TimeSpan>();
+
+            AddParticipantsToTrack(track, participants);
             Start();
         }
 
         public void AddParticipantsToTrack(Track track, List<IParticipant> participants)
         {
             int count = 0;
-
+            RandomizeEquipment();
             var TrackSections = track.Sections;
                 foreach (Section s in TrackSections)
                 {
@@ -57,10 +65,12 @@ namespace Controller
                     {
                         SectionData sectionData = GetSectionData(s);
                         sectionData.Left = participants[count];
-                        sectionData.DistanceLeft = 0;
+                        _rounds.Add(Participants[count], 0);
+                    sectionData.DistanceLeft = 0;
                         count++;
                         sectionData.Right = participants[count];
-                        sectionData.DistanceRight = 0;
+                        _rounds.Add(Participants[count], 0);
+                    sectionData.DistanceRight = 0;
                         count++;
                     }
 
@@ -86,54 +96,69 @@ namespace Controller
       
         }
 
-        public void RandomizeEquipment()
+        private void SetRandomBroken(ElapsedEventArgs args)
         {
-            foreach(IParticipant participant in Participants)
+            foreach (IParticipant participant in Participants)
             {
-                participant.IEquipment.Quality = _random.Next(1,3);
-                participant.IEquipment.Performance = _random.Next(6,10);
-            }
-        }
-
-       public void IsBroken()
-        {
-            foreach(IParticipant participant in Participants)
-            {
-                int i = _random.Next(1, 100);
-                int breakChance = participant.IEquipment.Quality;
-
-                int total = i - breakChance;
-
-                if (participant.IEquipment.IsBroken && i < 40)
+                int randomizer = _random.Next(1, 100);
+                if (randomizer % participant.IEquipment.Quality == 3)
                 {
-                    participant.IEquipment.IsBroken = false;
-                    
-                    
-                    if (participant.IEquipment.Performance > 1)
-                    {
-                        participant.IEquipment.Performance--;
-                    } else
-                    {
-                        if (participant.IEquipment.Speed > 1)
-                        {
-                            participant.IEquipment.Speed--;
-                        }
-                    }
-                    if (participant.IEquipment.Quality > 1)
-                    {
-                        participant.IEquipment.Quality--;
-                    }
-                } else if (!participant.IEquipment.IsBroken && total > 95)
-                {
+                    SetTimeBroken(participant, args);
                     participant.IEquipment.IsBroken = true;
                 }
             }
         }
-
-        public void OnTimedEvent(object sender, EventArgs e)
+        private void SetUnBroken()
         {
-            
-            IsBroken();
+            foreach (IParticipant participant in Participants)
+            {
+                if (participant.IEquipment.IsBroken)
+                {
+                    if (_random.Next(1, 5) == 2)
+                    {
+                        participant.IEquipment.IsBroken = false;
+                        if (participant.IEquipment.Quality > 2)
+                        {
+                            participant.IEquipment.Quality--;
+                        }
+                        else if (participant.IEquipment.Performance > 15)
+                        {
+                            participant.IEquipment.Performance--;
+                        }
+                    }
+                }
+            }
+        }
+   
+        private void SetTimeBroken(IParticipant participant, ElapsedEventArgs args)
+        {
+            TimeSpan timeSpan = new TimeSpan(args.SignalTime.Ticks - StartTime.Ticks);
+            if (timeSpan != TimeSpan.Zero)
+            {
+                Data.Competition.ParticipantsTimeBroken.Add(new ParticipantsTimeBroken()
+                { Participant = participant, TimeSpan = timeSpan, Track = Track });
+            }
+        }
+        private void SaveTimeBroken()
+        {
+            foreach (var VARIABLE in _timeBroken)
+            {
+                Data.Competition.ParticipantsTimeBroken.Add(new ParticipantsTimeBroken() { Participant = VARIABLE.Key, TimeSpan = VARIABLE.Value, Track = Track });
+            }
+        }
+
+        private void RandomizeEquipment()
+        {
+            foreach (IParticipant participant in Participants)
+            {
+                participant.IEquipment.Performance = _random.Next(5, 10);
+                participant.IEquipment.Quality = _random.Next(1, 5);
+                _quality.Add(participant, participant.IEquipment.Quality);
+            }
+        }
+
+        public void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
 
             for (int i = 0; i < Track.Sections.Count; i++)
             {
@@ -143,8 +168,8 @@ namespace Controller
 
                 System.Threading.Tasks.Parallel.Invoke
                     (
-                        () => UpdateLeft(sd, entry, i),
-                        () => UpdateRight(sd, entry, i)
+                        () => UpdateLeft(sd, entry, i, e),
+                        () => UpdateRight(sd, entry, i, e)
                     );
 
                 if(sd.Left != null || sd.Right != null)
@@ -157,9 +182,11 @@ namespace Controller
                     FinishRace();
                 }
             }
+            SetRandomBroken(e);
+            SetUnBroken();
         }
 
-        private void UpdateLeft(SectionData sd, KeyValuePair<Section, SectionData> entry, int i)
+        private void UpdateLeft(SectionData sd, KeyValuePair<Section, SectionData> entry, int i, ElapsedEventArgs e)
         {
             if (sd.Left != null && !Participants[0].IEquipment.IsBroken)
             {
@@ -170,6 +197,7 @@ namespace Controller
                 sd.DistanceLeft += speedParticipant;
                 if (sd.DistanceLeft > 100)
                 {
+                    SaveTimeForSectionAndParticipant(entry.Key, sd.Left, e);
                     sd.DistanceLeft = 0;
                     sd.Left = null;
 
@@ -194,22 +222,23 @@ namespace Controller
                     }
                     if (entry.Key.SectionType.Equals(SectionTypes.Finish))
                     {
-                        LapsLeft++;
-                        if (LapsLeft == Laps)
+                        _rounds[sd.Left]++;
+                        if (_rounds[sd.Left] == Laps)
                         {
                             sd.Left = null;
                             DriversChanged(new DriversChangedEventArgs(Track));
 
                             DriversFinished.Enqueue(participants[0]);
+                            SaveQuality(participants[0]);
                         }
                     }
-
+                    
                 }
 
             }
         }
 
-        private void UpdateRight(SectionData sd, KeyValuePair<Section, SectionData> entry, int i)
+        private void UpdateRight(SectionData sd, KeyValuePair<Section, SectionData> entry, int i, ElapsedEventArgs e)
         {
             if (sd.Right != null && !Participants[1].IEquipment.IsBroken)
             {
@@ -220,6 +249,7 @@ namespace Controller
                 sd.DistanceRight += speedParticipant;
                 if (sd.DistanceRight > 100)
                 {
+                    SaveTimeForSectionAndParticipant(entry.Key, sd.Right, e);
                     sd.DistanceRight = 0;
                     sd.Right = null;
 
@@ -246,22 +276,28 @@ namespace Controller
                     }
                     if (entry.Key.SectionType.Equals(SectionTypes.Finish))
                     {
-                        LapsRight++;
-                        if (LapsRight == Laps)
+                        _rounds[sd.Right]++;
+                        if (_rounds[sd.Right] == Laps)
                         {
                             sd.Right = null;
                             DriversChanged(new DriversChangedEventArgs(Track));
 
                             DriversFinished.Enqueue(participants[1]);
+                            SaveQuality(participants[1]);
                         }
                     }
-
+                    
                 }
 
             }
         }
         public void Start()
         {
+            foreach (IParticipant deelnemer in Participants)
+            {
+                _sectionTimes.Add(deelnemer, 0);
+                _timeBroken.Add(deelnemer, TimeSpan.Zero);
+            }
             timer.Start();
         }
 
@@ -270,13 +306,30 @@ namespace Controller
             timer.Elapsed -= OnTimedEvent;
             Console.Clear();
             timer.Close();
-            RaceFinishedEvent?.Invoke(this, EventArgs.Empty);
+            SaveTimeBroken();
+            RaceFinishedEvent?.Invoke(this, new RaceFinishedArgs() { Ranking = DriversFinished, Track = track }); 
 
         }
 
         public Queue<IParticipant> Ranking()
         {
             return DriversFinished;
+        }
+
+        private void SaveTimeForSectionAndParticipant(Section section, IParticipant participant, ElapsedEventArgs args)
+        {
+            long ticksLastRound = _sectionTimes[participant];
+            if (ticksLastRound == 0)
+            {
+                ticksLastRound = StartTime.Ticks;
+            }
+            TimeSpan timeSpan = new TimeSpan(args.SignalTime.Ticks - ticksLastRound);
+            _sectionTimes[participant] = timeSpan.Ticks;
+            Data.Competition.ParticipantsSectionTimes.Add(new ParticipantSectionTimes() { Participant = participant, Section = section, SectionTime = timeSpan });
+        }
+        private void SaveQuality(IParticipant participant)
+        {
+            Data.Competition.ParticipantsQuality.Add(new ParticipantsQuality() { Participant = participant, QualityBeforeRace = _quality[participant], QualityAfterRace = participant.IEquipment.Quality, Track = Track });
         }
     }
 }
