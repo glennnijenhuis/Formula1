@@ -252,6 +252,8 @@ namespace Formula1
             }
         }
 
+
+
         public static void HandleDriversChanged(DriversChangedEventArgs driversChangedEventArgs)
         {
             DrawTrack(driversChangedEventArgs.Track);

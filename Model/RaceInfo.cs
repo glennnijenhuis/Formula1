@@ -7,7 +7,7 @@ namespace Model
 {
     public class RaceInfo<T> where T : IRaceGegevensView
     {
-        private List<IRaceGegevensView> _list = new List<IRaceGegevensView>();
+        public List<IRaceGegevensView> _list = new List<IRaceGegevensView>();
 
         public void Add(T obj)
         {

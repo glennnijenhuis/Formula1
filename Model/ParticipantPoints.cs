@@ -45,7 +45,7 @@ namespace Model
                 }
             }
 
-            return $"De meeste punten zijn voor: {besteDeelnemer.Participant.Name} hij heeft {besteDeelnemer.Participant.Points}";
+            return $"De meeste punten zijn voor: {besteDeelnemer.Participant.Name} hij heeft {besteDeelnemer.Participant.Points} punten";
         }
     }
 }

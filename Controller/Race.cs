@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -17,8 +18,8 @@ namespace Controller
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
 
-        private Timer timer = new Timer(500);
-
+        public Timer timer = new Timer(500);
+      
         public Track Track { get => track; set => track = value; }
         public List<IParticipant> Participants { get => participants; set => participants = value; }
         public DateTime StartTime { get => startTime; set => startTime = value; }
@@ -28,29 +29,32 @@ namespace Controller
         public event RaceFinished RaceFinishedEvent;
         private Queue<IParticipant> DriversFinished;
 
-        private Dictionary<IParticipant, long> _sectionTimes;
+        public Dictionary<IParticipant, long> _sectionTimes;
         private Dictionary<IParticipant, int> _quality;
-        private Dictionary<IParticipant, int> _rounds;
-        private Dictionary<IParticipant, TimeSpan> _timeBroken;
+        public Dictionary<IParticipant, int> _rounds;
+        public Dictionary<IParticipant, TimeSpan> _timeBroken;
+
+        public Stopwatch stopwatch;
 
         public Race(Track track, List<IParticipant> participants)
         {
-           
+            stopwatch = new Stopwatch();
             Track = track;
             Participants = participants;
             _random = new Random(DateTime.Now.Millisecond);
             StartTime = DateTime.Now;
             DriversFinished = new Queue<IParticipant>();
             _positions = new Dictionary<Section, SectionData>();
-            
-            RaceFinishedEvent += Data.Competition.OnRaceFinished;
             timer.Elapsed += OnTimedEvent;
+            RaceFinishedEvent += Data.Competition.OnRaceFinished;
+            
             _rounds = new Dictionary<IParticipant, int>();
             _sectionTimes = new Dictionary<IParticipant, long>();
             _quality = new Dictionary<IParticipant, int>();
             _timeBroken = new Dictionary<IParticipant, TimeSpan>();
 
             AddParticipantsToTrack(track, participants);
+            
             Start();
         }
 
@@ -61,19 +65,22 @@ namespace Controller
             var TrackSections = track.Sections;
                 foreach (Section s in TrackSections)
                 {
-                    if (s.SectionType == SectionTypes.StartGrid && count < participants.Count)
-                    {
-                        SectionData sectionData = GetSectionData(s);
-                        sectionData.Left = participants[count];
-                        _rounds.Add(Participants[count], 0);
+                if (s.SectionType == SectionTypes.StartGrid && count < participants.Count)
+                {
+                    SectionData sectionData = GetSectionData(s);
+                    sectionData.Left = participants[count];
+                    _rounds.Add(Participants[count], 0);
                     sectionData.DistanceLeft = 0;
-                        count++;
-                        sectionData.Right = participants[count];
-                        _rounds.Add(Participants[count], 0);
+                    count++;
+                    sectionData.Right = participants[count];
+                    _rounds.Add(Participants[count], 0);
                     sectionData.DistanceRight = 0;
-                        count++;
-                    }
-
+                    count++;
+                }
+                else
+                {
+                    GetSectionData(s);
+                }
                 }
             
 
@@ -226,10 +233,11 @@ namespace Controller
                         if (_rounds[sd.Left] == Laps)
                         {
                             sd.Left = null;
-                            DriversChanged(new DriversChangedEventArgs(Track));
+                           
 
                             DriversFinished.Enqueue(participants[0]);
                             SaveQuality(participants[0]);
+                             DriversChanged(new DriversChangedEventArgs(Track));
                         }
                     }
                     
@@ -280,10 +288,11 @@ namespace Controller
                         if (_rounds[sd.Right] == Laps)
                         {
                             sd.Right = null;
-                            DriversChanged(new DriversChangedEventArgs(Track));
+                            
 
                             DriversFinished.Enqueue(participants[1]);
                             SaveQuality(participants[1]);
+                            DriversChanged(new DriversChangedEventArgs(Track));
                         }
                     }
                     
@@ -299,15 +308,17 @@ namespace Controller
                 _timeBroken.Add(deelnemer, TimeSpan.Zero);
             }
             timer.Start();
+            stopwatch.Start();
         }
 
         public void FinishRace()
         {
+            stopwatch.Stop();
             timer.Elapsed -= OnTimedEvent;
-            Console.Clear();
+            //Console.Clear();
             timer.Close();
             SaveTimeBroken();
-            RaceFinishedEvent?.Invoke(this, new RaceFinishedArgs() { Ranking = DriversFinished, Track = track }); 
+            RaceFinishedEvent?.Invoke(this, new RaceFinishedArgs() { Ranking = Ranking(), Track = track }); 
 
         }
 

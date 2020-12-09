@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Model
@@ -20,12 +21,20 @@ namespace Model
         {
             Tracks = new Queue<Track>();
             Participants = new List<IParticipant>();
-
+            
             ParticipantsPoints = new RaceInfo<ParticipantPoints>();
             ParticipantsQuality = new RaceInfo<ParticipantsQuality>();
             ParticipantsTimeBroken = new RaceInfo<ParticipantsTimeBroken>();
             ParticipantsSectionTimes = new RaceInfo<ParticipantSectionTimes>();
+            AddStartingPoints();
+        }
 
+        public void AddStartingPoints()
+        {
+            foreach (IParticipant participant in Participants)
+            {
+                ParticipantsPoints.Add(new ParticipantPoints() { Points = 0, Participant = participant, Track = Tracks.First() });
+            }
         }
 
         public Track NextTrack()
@@ -42,8 +51,10 @@ namespace Model
         public void AwardPoints(Queue<IParticipant> ranking, Track track)
         {
             int points = 25;
-            foreach (IParticipant participant in ranking)
+            while (ranking.Count > 0)
             {
+                IParticipant participant = ranking.Dequeue();
+                
                 ParticipantsPoints.Add(new ParticipantPoints() { Points = points, Participant = participant, Track = track });
                 participant.Points += points;
                 points = points - 5;
@@ -54,29 +65,7 @@ namespace Model
         public void OnRaceFinished(object sender, RaceFinishedArgs args)
         {
             AwardPoints(args.Ranking, args.Track);
-            Console.WriteLine($"Track: {args.Track.Name}, uitslag:");
-            int count = args.Ranking.Count;
-            for (int i = 1; i <= count; i++)
-            {
-                Console.WriteLine($"Plek {i} is voor {args.Ranking.Dequeue().Name}");
-            }
-
-            Console.WriteLine("");
-            Console.WriteLine(ParticipantsPoints.Print());
-            Console.WriteLine(ParticipantsQuality.Print());
-            Console.WriteLine("");
-            foreach (IParticipant participant in Participants)
-            {
-                Console.WriteLine($"{participant.Name} heeft {participant.Points} punten");
-            }
-            Console.WriteLine("");
-            Console.WriteLine("Next Race? (y/n)");
-
-            string console = Console.ReadLine();
-            while (console != "y")
-            {
-                console = Console.ReadLine();
-            }
+           
 
         }
 

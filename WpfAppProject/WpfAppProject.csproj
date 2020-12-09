@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\carBlue.png" />
+    <None Remove="images\carBroken.png" />
+    <None Remove="images\carGreen.png" />
+    <None Remove="images\carGrey.png" />
+    <None Remove="images\carRed.png" />
+    <None Remove="images\carYellow.png" />
+    <None Remove="images\cornerNE.png" />
+    <None Remove="images\cornerNW.png" />
+    <None Remove="images\cornerSE.png" />
+    <None Remove="images\cornerSW.png" />
+    <None Remove="images\finishEast.png" />
+    <None Remove="images\finishNorth.png" />
+    <None Remove="images\finishSouth.png" />
+    <None Remove="images\finishWest.png" />
+    <None Remove="images\startGridEast.png" />
+    <None Remove="images\startGridNorth.png" />
+    <None Remove="images\startGridSouth.png" />
+    <None Remove="images\startGridWest.png" />
+    <None Remove="images\straightHorizontal.png" />
+    <None Remove="images\straightVertical.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="images\carBlue.png" />
+    <Content Include="images\carBroken.png" />
+    <Content Include="images\carGreen.png" />
+    <Content Include="images\carGrey.png" />
+    <Content Include="images\carRed.png" />
+    <Content Include="images\carYellow.png" />
+    <Content Include="images\cornerNE.png" />
+    <Content Include="images\cornerNW.png" />
+    <Content Include="images\cornerSE.png" />
+    <Content Include="images\cornerSW.png" />
+    <Content Include="images\finishEast.png" />
+    <Content Include="images\finishNorth.png" />
+    <Content Include="images\finishSouth.png" />
+    <Content Include="images\finishWest.png" />
+    <Content Include="images\startGridEast.png" />
+    <Content Include="images\startGridNorth.png" />
+    <Content Include="images\startGridSouth.png" />
+    <Content Include="images\startGridWest.png" />
+    <Content Include="images\straightHorizontal.png" />
+    <Content Include="images\straightVertical.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+  </ItemGroup>
+
+</Project>
